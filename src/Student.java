@@ -6,21 +6,21 @@ package src;
  * Has various student methods like compareTo
  * @author Sofia Juliani, Arnold Nguyen
  */
-public class Student implements Comparable<Student> {
+public abstract class Student implements Comparable<Student> {
     private Profile profile;
     private Major major;
     private int creditCompleted;
 
     /**
      * Constructor class for Student object
-     * @param p A profile object for the student
-     * @param m A major object to create student
-     * @param c Credit Completed object
+     * @param givenProfile A profile object for the student
+     * @param givenMajor A major object to create student
+     * @param givenCredits Credit Completed object
      */
-    public Student(Profile p, Major m, int c) {
-        this.profile = p;
-        this.major = m;
-        this.creditCompleted = c;
+    public Student(Profile givenProfile, Major givenMajor, int givenCredits) {
+        this.profile = givenProfile;
+        this.major = givenMajor;
+        this.creditCompleted = givenCredits;
     }
 
     /**
@@ -124,6 +124,17 @@ public class Student implements Comparable<Student> {
     public String toString() {
         return " credits completed: " + this.creditCompleted + " ";
     }
+
+    public boolean isValid(int creditEnrolled){
+        if (creditEnrolled >= minCredit && creditEnrolled <= maxCredit)
+            return true;
+        else
+            return false;
+    }
+
+    public abstract double tuitionDue(int creditsEnrolled);
+
+    public abstract boolean isResident();
 
     /**
      * Testbed main for Student class test cases for Student methods
