@@ -2,8 +2,9 @@ package src;
 
 public class International extends NonResident{
     private boolean isStudyAbroad;
-    public static final int minInternationalCredits = 12,
-            maxInternationalCredits = 12;
+    private static final int minInternationalCredits = 12;
+    private static final int maxInternationalCredits = 12;
+    private static final int healthInsurance = 2650;
 
     @Override
     public boolean isValid(int creditEnrolled){ //override Student isValid
@@ -23,5 +24,15 @@ public class International extends NonResident{
                 return false;
         }
 
+    }
+
+    @Override
+    public double tuitionDue(int creditsEnrolled) {
+        if (this.isStudyAbroad) {
+            return universityFee + healthInsurance;
+        }
+        else {
+            return super.tuitionDue(creditsEnrolled) + healthInsurance;
+        }
     }
 }

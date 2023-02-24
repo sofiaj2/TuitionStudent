@@ -5,7 +5,7 @@ import java.util.Scanner;
  * such as sorting by certain attributes, performing commands on roster
  * @author Arnold Nguyen, Sofia Juliani
  */
-public class RosterManager {
+public class TuitionManager {
     /**
      * returns a Major object from a string from Major enum class
      * @param majorSubject represents major input from scanner

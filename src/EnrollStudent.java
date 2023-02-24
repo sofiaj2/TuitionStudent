@@ -2,11 +2,19 @@ public class EnrollStudent {
     private Profile profile;
     private int creditsEnrolled;
 
-    /**
-     * Determines if two Profile objects are equal to eachother.
-     * @param profile obj to compare
-     * @return true if the Profile objects are equal, false if not.
-     */
+    public EnrollStudent(Profile givenProfile, int creditsEnrolled){
+        this.profile = givenProfile;
+        this.creditsEnrolled = creditsEnrolled;
+    }
+
+    @Override
+    public int compareTo(EnrollStudent studentEnrolled) {
+        if (this.profile.compareTo(studentEnrolled.profile) > 0)
+            return 1;
+        else if (this.profile.compareTo(studentEnrolled.profile) < 0)
+            return -1;
+        return 0;
+    }
 
     @Override
     public boolean equals(Object obj) {

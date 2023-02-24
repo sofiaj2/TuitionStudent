@@ -10,6 +10,6 @@ public class RunProject2 {
      * @param args passing in arguments as a String
      */
     public static void main(String[] args) {
-        new RosterManager().run();
+        new TuitionManager().run();
     }
 }

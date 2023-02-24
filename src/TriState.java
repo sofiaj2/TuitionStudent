@@ -9,13 +9,14 @@ public class TriState extends NonResident {
         super(givenProfile, givenMajor, Credits);
     }
 
-    private double calculateTuition(int creditsEnrolled){
-        if (state.equals("NY")){
-            return tuitionDue(creditsEnrolled) - newYorkDiscount;
+    @Override
+    public double tuitionDue(int creditsEnrolled){
+        if (state.equalsIgnoreCase("NY")){
+            return super.tuitionDue(creditsEnrolled) - newYorkDiscount;
         }
-        else if (state.equals("CT")){
-            return tuitionDue(creditsEnrolled) - connecticutDiscount;
+        else if (state.equalsIgnoreCase("CT")){
+            return super.tuitionDue(creditsEnrolled) - connecticutDiscount;
         }
-        return tuitionDue(creditsEnrolled);
+        return super.tuitionDue(creditsEnrolled);
     }
 }

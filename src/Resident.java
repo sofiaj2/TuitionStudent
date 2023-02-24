@@ -5,6 +5,11 @@ public class Resident extends Student {
     private static final int residentTuition = 12536, creditHour = 404;
 
     public Resident(Profile givenProfile, Major givenMajor,
+                    int givenCredits) {
+        super(givenProfile, givenMajor, givenCredits);
+    }
+
+    public Resident(Profile givenProfile, Major givenMajor,
                     int givenCredits, int givenScholarship) {
         super(givenProfile, givenMajor, givenCredits);
         this.scholarship = givenScholarship;
@@ -19,9 +24,9 @@ public class Resident extends Student {
                 tuition += creditHour * (creditsEnrolled - creditHourLimit);
             }
         }
-        else {
-            tuition =
-                    (creditHour * creditsEnrolled) + (percentFullTimeRate * residentTuition);
+        else { //part time student
+            tuition = (creditHour * creditsEnrolled)
+                    + (percentFullTimeRate * residentTuition);
         }
         return tuition;
     }
