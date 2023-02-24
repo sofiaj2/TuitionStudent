@@ -15,7 +15,6 @@ public class Resident extends Student {
         this.scholarship = givenScholarship;
     }
 
-
     public double tuitionDue(int creditsEnrolled) {
         double tuition;
         if (isFullTime(creditsEnrolled)) { //full time student

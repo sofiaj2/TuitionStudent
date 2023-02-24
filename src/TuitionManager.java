@@ -30,25 +30,21 @@ public class TuitionManager {
         return studentMajor;
     }
 
-    /**
-     * Reads in command for adding a student to the roster
-     * @param scanner object that reads in input
-     * @param rutgersRoster roster for Students to be added
-     */
-    private void commandAdd(Scanner scanner, Roster rutgersRoster) {
+    private void commandAdd(Scanner scanner, Roster rutgersRoster,
+                             Enrollment rutgersEnroll, String dataToken) {
         String firstName = scanner.next();
         String lastName = scanner.next();
         String dateOfBirth = scanner.next();
         String majorSubject = scanner.next();
-        String creditCompleted = scanner.next();
-        Date studentDate = new Date(dateOfBirth);
+        String creditsEnrolled = scanner.next();
         Major studentMajor = returnMajor(majorSubject);
+        Date studentDate = new Date(dateOfBirth);
         boolean isValidCreditCompleted = true;
         if (!studentDate.isValid())
             System.out.println("DOB invalid: "
                     + dateOfBirth + " not a valid calendar date!");
         try {
-            if (Integer.parseInt(creditCompleted) < 0) {
+            if (Integer.parseInt(creditsEnrolled) < 0) {
                 System.out.println("Credits completed invalid: cannot be negative!");
                 isValidCreditCompleted = false;
             }
@@ -58,34 +54,55 @@ public class TuitionManager {
         }
         if (studentMajor != null && studentDate.isValid() && isValidCreditCompleted) {
             Profile studentProfile = new Profile(lastName, firstName, studentDate);
-            int credits = Integer.parseInt(creditCompleted);
-            Student student = new Student(studentProfile, studentMajor, credits);
-            if (rutgersRoster.contains(student))
-                System.out.println(firstName + " " + lastName + " " + dateOfBirth
-                        + " is already in the roster.");
-            else {
-                if (rutgersRoster.add(student))
-                    System.out.println(firstName + " " + lastName + " " +
-                            dateOfBirth + " added to the roster.");
-                else
-                    System.out.println("DOB invalid: " + studentDate +
-                            " younger than 16 years old.");
+            int credits = Integer.parseInt(creditsEnrolled);
+            Student student;
+            if (dataToken.equals("AR")) {
+                student = new Resident(studentProfile, studentMajor,
+                        credits);
+            } else if (dataToken.equals("AT")) {
+                student = new TriState(studentProfile, studentMajor
+                        , credits);
+            } else if (dataToken.equals("AI")) {
+                student = new International(studentProfile,
+                        studentMajor, credits);
+            } else if (dataToken.equals("AN")) {
+                student = new NonResident(studentProfile,
+                        studentMajor, credits);
+            } else
+                student = null;
+            if (student != null) {
+                if (rutgersRoster.contains(student)) {
+                    System.out.println(firstName + " " + lastName + " " + dateOfBirth
+                            + " is already in the roster.");
+                } else {
+                    if (rutgersRoster.add(student)) {
+                        System.out.println(firstName + " " + lastName + " " +
+                                dateOfBirth + " added to the roster.");
+                    } else {
+                        System.out.println("DOB invalid: " + studentDate +
+                                " younger than 16 years old.");
+                    }
+                }
             }
         }
     }
+    public void enrollStudent(EnrollStudent studentforEnrollment){
 
+    }
     /**
      * Read the lines of user input and calls the respective command
      * dependent on the specific data token represented.
      */
     public void run() {
-        System.out.println("Roster Manager running...");
+        System.out.println("Tuition Manager running...");
         Scanner scanner = new Scanner(System.in);
         Roster rutgersRoster = new Roster();
+        Enrollment rutgersEnroll = new Enrollment();
         while (scanner.hasNextLine()) {
             String dataToken = scanner.next();
-            if (dataToken.equals("A")) {
-                commandAdd(scanner, rutgersRoster);
+            if (dataToken.equals("AR") || dataToken.equals("AI") ||
+            dataToken.equals("AN") || dataToken.equals("AT")){
+                commandAdd(scanner, rutgersRoster, rutgersEnroll, dataToken);
             } else if (dataToken.equals("R")) {
                 commandRemove(scanner, rutgersRoster);
             } else if (dataToken.equals("C")) {
@@ -105,8 +122,10 @@ public class TuitionManager {
                     System.out.println("Student roster is empty!");
                 else { rutgersRoster.print(); }
             } else if (dataToken.equals("Q")) {
-                System.out.println("Roster Manager terminated.");
+                System.out.println("Tuition Manager terminated.");
                 break;
+            } else if (dataToken.equals("E")){
+
             } else {
                 System.out.println(dataToken + " is an invalid command!");
             }

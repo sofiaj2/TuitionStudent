@@ -6,6 +6,9 @@ public class International extends NonResident{
     private static final int maxInternationalCredits = 12;
     private static final int healthInsurance = 2650;
 
+    public International(Profile givenProfile, Major givenMajor, int Credits){
+        super(givenProfile, givenMajor, Credits);
+    }
     @Override
     public boolean isValid(int creditEnrolled){ //override Student isValid
         // max number that study abroad international student is 12
@@ -23,7 +26,6 @@ public class International extends NonResident{
             else
                 return false;
         }
-
     }
 
     @Override

@@ -1,4 +1,5 @@
-public class EnrollStudent {
+package src;
+public class EnrollStudent implements Comparable<EnrollStudent> {
     private Profile profile;
     private int creditsEnrolled;
 
@@ -18,19 +19,20 @@ public class EnrollStudent {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Profile) {
-            Profile profileObj = (Profile) obj; // this code is just copy
-            // and pasted, it's not correct
-            if (profileObj.lname.compareToIgnoreCase(this.lname) == 0 &&
-                    profileObj.fname.compareToIgnoreCase(this.fname) == 0 &&
-                    profileObj.dob.compareTo(this.dob) == 0) {
+        if (obj instanceof EnrollStudent) {
+            EnrollStudent studentEnrollObj = (EnrollStudent) obj;
+            if (studentEnrollObj.profile.equals(this.profile) &&
+                    studentEnrollObj.creditsEnrolled == this.creditsEnrolled)
+            {
                 return true;
             }
         }
         return false;
     }
 
+    public Profile getProfile() {
+        return this.profile;
+    }
 
-
-
+    public int getCreditsEnrolled() {return this.creditsEnrolled;}
 }

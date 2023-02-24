@@ -17,7 +17,4 @@ public class NonResident extends Student {
                     creditHourLimit) * creditHour));
         return nonResidentTuition + universityFee;
     }
-
-
-
 }
