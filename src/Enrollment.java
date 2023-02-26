@@ -49,15 +49,14 @@ public class Enrollment {
         this.size += increaseByValue;
     }
 
-    public void remove(EnrollStudent enrollStudent)
-    {
+    public void remove(EnrollStudent enrollStudent) {
         boolean studentExists = false;
         // instantiate the variable that will contain the index of the
         // student to remove:
         int nullIndex = -1;
         for (int i = 0; i < this.size; i++) {
             if (this.enrollStudents[i] != null) {
-                if (this.enrollStudents[i].equals(enrollStudent)){
+                if (this.enrollStudents[i].equals(enrollStudent)) {
                     studentExists = true;
                     nullIndex = i;
                     this.enrollStudents[i] = null;
@@ -65,8 +64,8 @@ public class Enrollment {
                 }
             }
         }
-        for (int i = this.size; i-- > 0;){
-            if (this.enrollStudents[i] != null){
+        for (int i = this.size; i-- > 0; ) {
+            if (this.enrollStudents[i] != null) {
                 this.enrollStudents[nullIndex] = this.enrollStudents[i];
                 this.enrollStudents[i] = null;
                 break;
@@ -74,10 +73,10 @@ public class Enrollment {
         }
     }
 
-    public boolean contains(EnrollStudent enrollStudent){
+    public boolean contains(EnrollStudent enrollStudent) {
         for (int i = 0; i < this.size; i++) {
             if (this.enrollStudents[i] != null) {
-                if (this.enrollStudents[i].equals(enrollStudent)){
+                if (this.enrollStudents[i].equals(enrollStudent)) {
                     return true;
                 }
             }
@@ -85,6 +84,16 @@ public class Enrollment {
         return false;
     }
 
+    public EnrollStudent find(EnrollStudent enrollStudent) {
+        for (int i = 0; i < this.size; i++) {
+            if (this.enrollStudents[i] != null) {
+                if (this.enrollStudents[i].equals(enrollStudent)) {
+                    return this.enrollStudents[i];
+                }
+            }
+        }
+        return null;
+    }
     public void print(){
         for (int i = 0; i < this.size; i++){
             System.out.println(this.enrollStudents[i].getProfile().toString()

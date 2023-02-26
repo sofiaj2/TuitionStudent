@@ -184,6 +184,55 @@ public class TuitionManager {
         }
 
     }
+
+    private void dropStudent(Scanner scanner, Roster rutgersRoster,
+                             Enrollment rutgersEnroll, String dataToken){
+        String firstName;
+        String lastName;
+        String dateOfBirth;
+        Date studentDate;
+
+        try {
+            firstName = scanner.next();
+            lastName = scanner.next();
+            dateOfBirth = scanner.next();
+            studentDate = new Date(dateOfBirth);
+        }
+        catch (NoSuchElementException exception) {
+            System.out.println("Missing data in line command.");
+            return;
+        }
+        Profile studentProfile = new Profile(lastName, firstName, studentDate);
+        EnrollStudent studentToEnroll = new EnrollStudent(studentProfile);
+        rutgersEnroll.remove(studentToEnroll);
+    }
+
+    private void awardScholarship(Scanner scanner, Roster rutgersRoster,
+                                  Enrollment rutgersEnroll, String dataToken){
+        String firstName;
+        String lastName;
+        String dateOfBirth;
+        String scholarshipFund;
+        int scholarship;
+        Date studentDate;
+        try {
+            firstName = scanner.next();
+            lastName = scanner.next();
+            dateOfBirth = scanner.next();
+            scholarshipFund = scanner.next();
+            scholarship = Integer.parseInt(scholarshipFund);
+            studentDate = new Date(dateOfBirth);
+        }
+        catch (NoSuchElementException exception) {
+            System.out.println("Missing data in line command.");
+            return;
+        }
+        Profile studentProfile = new Profile(lastName, firstName, studentDate);
+        EnrollStudent studentToEnroll = new EnrollStudent(studentProfile);
+        if (rutgersEnroll.contains(studentToEnroll)){
+
+        }
+    }
     /**
      * Read the lines of user input and calls the respective command
      * dependent on the specific data token represented.
@@ -220,8 +269,12 @@ public class TuitionManager {
                 System.out.println("Tuition Manager terminated.");
                 break;
             } else if (dataToken.equals("E")){
-
-            } else {
+                enrollStudent(scanner, rutgersRoster, rutgersEnroll,
+                        dataToken);
+            } else if (dataToken.equals("D")){
+                dropStudent(scanner, rutgersRoster, rutgersEnroll, dataToken);
+            }
+            else {
                 System.out.println(dataToken + " is an invalid command!");
             }
         }

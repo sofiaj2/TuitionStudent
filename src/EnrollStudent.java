@@ -7,6 +7,14 @@ public class EnrollStudent implements Comparable<EnrollStudent> {
         this.profile = givenProfile;
         this.creditsEnrolled = creditsEnrolled;
     }
+    public EnrollStudent(Profile givenProfile){
+        this.profile = givenProfile;
+    }
+
+    public EnrollStudent(EnrollStudent studentToEnroll) {
+        this.profile = studentToEnroll.profile;
+        this.creditsEnrolled = studentToEnroll.creditsEnrolled;
+    }
 
     @Override
     public int compareTo(EnrollStudent studentEnrolled) {
@@ -21,8 +29,7 @@ public class EnrollStudent implements Comparable<EnrollStudent> {
     public boolean equals(Object obj) {
         if (obj instanceof EnrollStudent) {
             EnrollStudent studentEnrollObj = (EnrollStudent) obj;
-            if (studentEnrollObj.profile.equals(this.profile) &&
-                    studentEnrollObj.creditsEnrolled == this.creditsEnrolled)
+            if (studentEnrollObj.profile.equals(this.profile))
             {
                 return true;
             }

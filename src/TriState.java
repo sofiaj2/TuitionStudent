@@ -12,6 +12,14 @@ public class TriState extends NonResident {
     }
 
     @Override
+    public String getClassification() {
+        return "(non-resident)(tri-state)";
+    }
+
+    @Override
+    public String invalidStudent() { return"(TriState) "; }
+
+    @Override
     public double tuitionDue(int creditsEnrolled){
         if (this.state.equalsIgnoreCase("NY")){
             return super.tuitionDue(creditsEnrolled) - newYorkDiscount;
