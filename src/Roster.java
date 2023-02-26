@@ -32,6 +32,14 @@ public class Roster {
         return NOT_FOUND;
     }
 
+    public Student findStudent(Profile profile) {
+        for (int i = 0; i < this.size; i++)
+            if (this.roster[i].getProfile().equals(profile)) {
+                return this.roster[i];
+            }
+        return null;
+    }
+
     /**
      * Grows the array capacity of roster when needed by 4
      */
@@ -40,7 +48,33 @@ public class Roster {
         int increaseByValue = 4;
         Student[] tempRoster = new Student[this.size + increaseByValue];
         for (int i = 0; i < this.size; i++) {
-            tempRoster[i] = new Student(this.roster[i]);
+            Student tempStudent = tempRoster[i];
+            Profile tempProfile = this.roster[i].getProfile();
+            Major tempMajor = this.roster[i].getMajor();
+            int tempCredits = this.roster[i].getCreditCompleted();
+            if (tempStudent.isResident()) { //copy a new resident
+                tempRoster[i] = new Resident(tempProfile, tempMajor, tempCredits);
+            }
+            else {
+                String type = tempStudent.getClassification();
+                if (type.equals("(non-resident)")) { //copy a non-resident
+                    tempRoster[i] = new NonResident(tempProfile, tempMajor, tempCredits);
+                }
+                else if (type.equals("(non-resident)(tri-state)")) { //tri-state student
+                    String state = this.roster[i].getState();
+                    tempRoster[i] = new TriState()
+                }
+                else if (type.equals("(non-resident)(international:study abroad)")) {
+                    tempRoster[i] = new International(tempProfile,
+                            tempMajor, tempCredits, true);
+                }
+                else if (type.equals("(non-resident)(international)")) {
+                    tempRoster[i] = new International(tempProfile,
+                            tempMajor, tempCredits, false);
+                }
+            }
+
+
         }
         this.roster = tempRoster;
         this.size += increaseByValue;
@@ -144,6 +178,17 @@ public class Roster {
         for (int i = 0; i < this.size; i++) {
             if (this.roster[i] != null) {
                 if (this.roster[i].equals(student)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean contains(Profile profile) {
+        for (int i = 0; i < this.size; i++) {
+            if (this.roster[i] != null) {
+                if (this.roster[i].getProfile().equals(profile)){
                     return true;
                 }
             }

@@ -15,6 +15,11 @@ public class Resident extends Student {
         this.scholarship = givenScholarship;
     }
 
+    public Resident(Resident givenResident) {
+        super(givenResident.getProfile(), givenResident.getMajor(),
+                givenResident.getCreditCompleted());
+    }
+
     public double tuitionDue(int creditsEnrolled) {
         double tuition;
         if (isFullTime(creditsEnrolled)) { //full time student
@@ -38,5 +43,12 @@ public class Resident extends Student {
         if (credits >= 12)
             return true;
         return false;
+    }
+    public int getScholarship(){ return this.scholarship; }
+    public String getClassification() {
+        return "(resident)";
+    }
+    public String invalidStudent() {
+        return "(Resident) ";
     }
 }

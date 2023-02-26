@@ -1,4 +1,5 @@
 package src;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 /**
  * Roster Manager class that manages the roster, with various methods
@@ -32,61 +33,155 @@ public class TuitionManager {
 
     private void commandAdd(Scanner scanner, Roster rutgersRoster,
                              Enrollment rutgersEnroll, String dataToken) {
-        String firstName = scanner.next();
-        String lastName = scanner.next();
-        String dateOfBirth = scanner.next();
-        String majorSubject = scanner.next();
-        String creditsEnrolled = scanner.next();
-        Major studentMajor = returnMajor(majorSubject);
-        Date studentDate = new Date(dateOfBirth);
-        boolean isValidCreditCompleted = true;
+        String firstName;
+        String lastName;
+        String dateOfBirth;
+        String majorSubject;
+        String creditsEnrolled;
+        Major studentMajor;
+        Date studentDate;
+        try {
+            firstName = scanner.next();
+            lastName = scanner.next();
+            dateOfBirth = scanner.next();
+            majorSubject = scanner.next();
+            creditsEnrolled = scanner.next();
+            studentMajor = returnMajor(majorSubject);
+            studentDate = new Date(dateOfBirth);
+        } catch (NoSuchElementException exception) {
+            System.out.println("Missing data in line command.");
+            return; }
+        boolean isValidCreditCompleted = isValidCreditsAndDate(studentDate,
+                creditsEnrolled, dateOfBirth);
+        if (studentMajor != null && studentDate.isValid() && isValidCreditCompleted) {
+            Profile studentProfile = new Profile(lastName, firstName, studentDate);
+            int credits = Integer.parseInt(creditsEnrolled);
+            Student student = createStudentType(dataToken, studentProfile, studentMajor,
+                    credits, scanner);
+            addRoster(student, rutgersRoster, firstName, lastName, dateOfBirth
+            , studentDate);
+        }
+    }
+    private void addRoster(Student student, Roster rutgersRoster,
+                                  String firstName, String lastName,
+                                  String dateOfBirth, Date studentDate){
+        if (student != null) {
+            if (rutgersRoster.contains(student)) {
+                System.out.println(firstName + " " + lastName + " " + dateOfBirth
+                        + " is already in the roster.");
+            } else {
+                if (rutgersRoster.add(student)) {
+                    System.out.println(firstName + " " + lastName + " " +
+                            dateOfBirth + " added to the roster.");
+                } else {
+                    System.out.println("DOB invalid: " + studentDate +
+                            " younger than 16 years old.");
+                }
+            }
+        }
+    }
+    private Student createStudentType(String dataToken,
+                                      Profile studentProfile,
+                                      Major studentMajor,
+                                      int credits, Scanner scanner) {
+        if (dataToken.equals("AR")) {
+            return new Resident(studentProfile, studentMajor, credits);
+        } else if (dataToken.equals("AT")) {
+            String state;
+            try {
+                state = scanner.next();
+            }
+            catch (NoSuchElementException exception) {
+                System.out.println("Missing data in line command.");
+                return null;
+            }
+            if (state.equalsIgnoreCase("CT") || state.equalsIgnoreCase("NY")) {
+                return new TriState(studentProfile, studentMajor, credits,
+                    state);
+            }
+            else {
+                return null;
+            }
+        } else if (dataToken.equals("AI")) {
+            boolean studiesAbroad;
+            try {
+                studiesAbroad = scanner.nextBoolean();
+            }
+            catch (NoSuchElementException exception) {
+                studiesAbroad = false;
+            }
+            return new International(studentProfile,
+                    studentMajor, credits, studiesAbroad);
+        } else if (dataToken.equals("AN")) {
+            return new NonResident(studentProfile,
+                    studentMajor, credits);
+        } else
+            return null;
+    }
+
+    private boolean isValidCreditsAndDate(Date studentDate,
+                                         String creditsEnrolled,
+                                         String dateOfBirth) {
         if (!studentDate.isValid())
             System.out.println("DOB invalid: "
                     + dateOfBirth + " not a valid calendar date!");
         try {
             if (Integer.parseInt(creditsEnrolled) < 0) {
                 System.out.println("Credits completed invalid: cannot be negative!");
-                isValidCreditCompleted = false;
+                return false;
             }
         } catch (NumberFormatException nfe) {
             System.out.println("Credits completed invalid: not an integer!");
-            isValidCreditCompleted = false;
+            return false;
         }
-        if (studentMajor != null && studentDate.isValid() && isValidCreditCompleted) {
+        return true;
+    }
+
+    public void enrollStudent(Scanner scanner,
+                              Roster rutgersRoster, Enrollment rutgersEnroll,
+                              String dataToken){
+        String firstName;
+        String lastName;
+        String dateOfBirth;
+        String creditsEnrolled;
+        Date studentDate;
+        try {
+            firstName = scanner.next();
+            lastName = scanner.next();
+            dateOfBirth = scanner.next();
+            creditsEnrolled = scanner.next();
+            studentDate = new Date(dateOfBirth);
+        }
+        catch (NoSuchElementException exception) {
+            System.out.println("Missing data in line command.");
+            return;
+        }
+        if (studentDate.isValid() && isValidCreditsAndDate(studentDate,
+                creditsEnrolled, dateOfBirth)) {
             Profile studentProfile = new Profile(lastName, firstName, studentDate);
             int credits = Integer.parseInt(creditsEnrolled);
-            Student student;
-            if (dataToken.equals("AR")) {
-                student = new Resident(studentProfile, studentMajor,
-                        credits);
-            } else if (dataToken.equals("AT")) {
-                student = new TriState(studentProfile, studentMajor
-                        , credits);
-            } else if (dataToken.equals("AI")) {
-                student = new International(studentProfile,
-                        studentMajor, credits);
-            } else if (dataToken.equals("AN")) {
-                student = new NonResident(studentProfile,
-                        studentMajor, credits);
-            } else
-                student = null;
-            if (student != null) {
-                if (rutgersRoster.contains(student)) {
-                    System.out.println(firstName + " " + lastName + " " + dateOfBirth
-                            + " is already in the roster.");
-                } else {
-                    if (rutgersRoster.add(student)) {
-                        System.out.println(firstName + " " + lastName + " " +
-                                dateOfBirth + " added to the roster.");
-                    } else {
-                        System.out.println("DOB invalid: " + studentDate +
-                                " younger than 16 years old.");
+            EnrollStudent studentToEnroll =
+                    new EnrollStudent(studentProfile, credits);
+            if (!rutgersRoster.contains(studentProfile)) { //not in roster
+                System.out.println("Cannot enroll: " + studentProfile.toString() +
+                        " is not in the roster.");
+            }
+            else {
+                Student rosterStudent = rutgersRoster.findStudent(studentProfile);
+                if (!rosterStudent.isValid(credits)) { //not valid credits
+                    System.out.println(rosterStudent.invalidStudent() + credits +
+                            ": invalid credit hours.");
+                }
+                else {
+                    if (!rutgersEnroll.contains(studentToEnroll)) {
+                        rutgersEnroll.add(studentToEnroll);
+                    }
+                    else {
+                        rutgersEnroll.updateCredits(studentProfile, credits);
                     }
                 }
             }
         }
-    }
-    public void enrollStudent(EnrollStudent studentforEnrollment){
 
     }
     /**

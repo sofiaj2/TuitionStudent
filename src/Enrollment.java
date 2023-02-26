@@ -3,28 +3,50 @@ package src;
 public class Enrollment {
     private EnrollStudent[] enrollStudents;
     private int size;
-    public void add(EnrollStudent enrollStudent)
-    {
-        if (!contains(enrollStudent)){
-        if (!isEnrollmentFull(enrollStudents)){
-            for (int i = 0; i < this.size; i++)
-            {
-                if (enrollStudents[i] == null)
-                {
-                    enrollStudents[i] = enrollStudent;
-                    return;
+
+    public Enrollment() {
+        this.size = 4;
+        this.enrollStudents = new EnrollStudent[this.size];
+    }
+
+    public void add(EnrollStudent enrollStudent) { //add to the end of array
+        if (isEnrollmentFull(this.enrollStudents)) {
+            this.grow();
+        }
+
+        if (!contains(enrollStudent)) { //add
+            // enrollStudent for the first time
+            if (!isEnrollmentFull(enrollStudents)) {
+                for (int i = 0; i < this.size; i++) {
+                    if (enrollStudents[i] == null) {
+                        enrollStudents[i] = enrollStudent;
+                        return;
+                    }
                 }
             }
-        }}
-    } //add to the end of array
+        }
+
+    }
+
     //move the last one in the array to replace the deleting index position
-    private boolean isEnrollmentFull(EnrollStudent[] enrollStudents) {
+    private boolean isEnrollmentFull(EnrollStudent[] enrollStudentsInstance) {
         for (int i = 0; i < this.size; i++) {
-            if (enrollStudents[i] == null) {
+            if (enrollStudentsInstance[i] == null) {
                 return false;
             }
         }
         return true;
+    }
+
+    private void grow() {
+        int increaseByValue = 4;
+        EnrollStudent[] tempEnrollment =
+                new EnrollStudent[this.size + increaseByValue];
+        for (int i = 0; i < this.size; i++) {
+            tempEnrollment[i] = new EnrollStudent(this.enrollStudents[i]);
+        }
+        this.enrollStudents = tempEnrollment;
+        this.size += increaseByValue;
     }
 
     public void remove(EnrollStudent enrollStudent)
@@ -70,4 +92,14 @@ public class Enrollment {
                     + this.enrollStudents[i].getCreditsEnrolled());
         }
     } //print the array as is without sorting
+
+    public void updateCredits(Profile studentProfile, int credits) {
+        for (int i = 0; i < this.size; i++) {
+            if (this.enrollStudents[i] != null) {
+                if (this.enrollStudents[i].getProfile().equals(studentProfile)){
+                    this.enrollStudents[i].setCreditsEnrolled(credits);
+                }
+            }
+        }
+    }
 }

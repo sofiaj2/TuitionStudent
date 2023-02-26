@@ -17,4 +17,12 @@ public class NonResident extends Student {
                     creditHourLimit) * creditHour));
         return nonResidentTuition + universityFee;
     }
+
+    public String getClassification() {
+        return "(non-resident)";
+    }
+
+    public String invalidStudent() {
+        return "(Non-Resident) ";
+    }
 }

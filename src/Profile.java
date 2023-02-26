@@ -23,7 +23,7 @@ public class Profile implements Comparable<Profile> {
 
     /**
      * Determines if two Profile objects are equal to eachother.
-     * @param profile obj to compare
+     * @param obj to compare
      * @return true if the Profile objects are equal, false if not.
      */
     @Override

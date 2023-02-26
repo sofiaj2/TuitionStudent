@@ -6,8 +6,10 @@ public class International extends NonResident{
     private static final int maxInternationalCredits = 12;
     private static final int healthInsurance = 2650;
 
-    public International(Profile givenProfile, Major givenMajor, int Credits){
+    public International(Profile givenProfile, Major givenMajor,
+                         int Credits, boolean studiesAbroad){
         super(givenProfile, givenMajor, Credits);
+        this.isStudyAbroad = studiesAbroad;
     }
     @Override
     public boolean isValid(int creditEnrolled){ //override Student isValid
@@ -37,4 +39,22 @@ public class International extends NonResident{
             return super.tuitionDue(creditsEnrolled) + healthInsurance;
         }
     }
+
+    @Override
+    public String getClassification() {
+        if (this.isStudyAbroad) {
+            return "(non-resident)(international:study abroad)";
+        }
+        return "(non-resident)(international)";
+
+    }
+
+    @Override
+    public String invalidStudent() {
+        if (this.isStudyAbroad) {
+            return "(International studentstudy abroad) ";
+        }
+        return "(International student)";
+    }
+
 }

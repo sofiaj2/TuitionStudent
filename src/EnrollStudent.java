@@ -35,4 +35,9 @@ public class EnrollStudent implements Comparable<EnrollStudent> {
     }
 
     public int getCreditsEnrolled() {return this.creditsEnrolled;}
+
+    public void setCreditsEnrolled(int newCredits) {
+        this.creditsEnrolled = newCredits;
+    }
+
 }

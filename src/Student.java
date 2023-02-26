@@ -39,7 +39,7 @@ public abstract class Student implements Comparable<Student> {
 
     /**
      * Profile only constructor for Student
-     * @param p is Profile attribute
+     * @param givenProfile is Profile attribute
      */
     public Student(Profile givenProfile) {
         this.profile = givenProfile;
@@ -139,6 +139,10 @@ public abstract class Student implements Comparable<Student> {
     public abstract double tuitionDue(int creditsEnrolled);
 
     public abstract boolean isResident();
+
+    public abstract String invalidStudent();
+
+    public abstract String getClassification();
 
     /**
      * Testbed main for Student class test cases for Student methods
