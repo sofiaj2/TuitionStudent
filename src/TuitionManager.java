@@ -1,6 +1,7 @@
 package src;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.text.DecimalFormat;
 /**
  * Roster Manager class that manages the roster, with various methods
  * such as sorting by certain attributes, performing commands on roster
@@ -185,8 +186,7 @@ public class TuitionManager {
 
     }
 
-    private void dropStudent(Scanner scanner, Roster rutgersRoster,
-                             Enrollment rutgersEnroll, String dataToken){
+    private void dropStudent(Scanner scanner, Enrollment rutgersEnroll){
         String firstName;
         String lastName;
         String dateOfBirth;
@@ -203,34 +203,53 @@ public class TuitionManager {
             return;
         }
         Profile studentProfile = new Profile(lastName, firstName, studentDate);
-        EnrollStudent studentToEnroll = new EnrollStudent(studentProfile);
-        rutgersEnroll.remove(studentToEnroll);
+        EnrollStudent studentToDrop = new EnrollStudent(studentProfile);
+        if (rutgersEnroll.contains(studentToDrop)) {
+            rutgersEnroll.remove(studentToDrop);
+            System.out.println(studentProfile + " dropped");
+        }
+        else {
+            System.out.println(studentProfile + "  is not enrolled.");
+        }
+
     }
 
-    private void awardScholarship(Scanner scanner, Roster rutgersRoster,
-                                  Enrollment rutgersEnroll, String dataToken){
+    private void awardScholarship(Scanner scanner, Roster rutgersRoster){
         String firstName;
         String lastName;
         String dateOfBirth;
-        String scholarshipFund;
-        int scholarship;
+        String scholarshipString;
         Date studentDate;
         try {
             firstName = scanner.next();
             lastName = scanner.next();
             dateOfBirth = scanner.next();
-            scholarshipFund = scanner.next();
-            scholarship = Integer.parseInt(scholarshipFund);
+            scholarshipString = scanner.next();
             studentDate = new Date(dateOfBirth);
-        }
-        catch (NoSuchElementException exception) {
+        } catch (NoSuchElementException exception) {
             System.out.println("Missing data in line command.");
             return;
         }
         Profile studentProfile = new Profile(lastName, firstName, studentDate);
-        EnrollStudent studentToEnroll = new EnrollStudent(studentProfile);
-        if (rutgersEnroll.contains(studentToEnroll)){
-
+        if (studentDate.isValid() && isValidScholarshipAndDate(scholarshipString, studentDate, dateOfBirth)) {
+            if (rutgersRoster.contains(studentProfile)){
+                Student studentToAward = rutgersRoster.findStudent(studentProfile);
+                if (studentToAward.isResident()) { //check if resident
+                    Resident residentToAward = (Resident) studentToAward;
+                    if (residentToAward.isFullTime()) {
+                        int scholarship = Integer.parseInt(scholarshipString);
+                        residentToAward.setScholarship(scholarship);
+                        System.out.println(studentProfile +
+                                ": scholarship amount updated.");
+                    } else { //not full time
+                        System.out.println(" part time student is not " +
+                                "eligible for the scholarship.");
+                    }
+                } else { //not resident
+                    System.out.println(studentProfile + " " + studentToAward.invalidStudent() +
+                            "is not eligible for the scholarship.");
+                }
+            } else {System.out.println(studentProfile + " is not in the roster.");}
         }
     }
     /**
@@ -269,10 +288,21 @@ public class TuitionManager {
                 System.out.println("Tuition Manager terminated.");
                 break;
             } else if (dataToken.equals("E")){
-                enrollStudent(scanner, rutgersRoster, rutgersEnroll,
-                        dataToken);
+                commandEnrollStudent(scanner, rutgersRoster, rutgersEnroll);
             } else if (dataToken.equals("D")){
-                dropStudent(scanner, rutgersRoster, rutgersEnroll, dataToken);
+                dropStudent(scanner,rutgersEnroll);
+            }
+            else if (dataToken.equals("S")) {
+                awardScholarship(scanner, rutgersRoster);
+            }
+            else if (dataToken.equals("PT")){
+                displayTuition( rutgersEnroll, rutgersRoster);
+            }
+            else if (dataToken.equals("PE")){
+                displayEnrollment(rutgersEnroll);
+            }
+            else if (dataToken.equals("SE")) {
+                semesterEnd(rutgersRoster, rutgersEnroll);
             }
             else {
                 System.out.println(dataToken + " is an invalid command!");
@@ -292,12 +322,11 @@ public class TuitionManager {
 
         Date studentDate = new Date(dateOfBirth);
         Profile studentProfile = new Profile(lastName, firstName, studentDate);
-        Student removeStudent = new Student(studentProfile);
 
-        if(rutgersRoster.remove(removeStudent))
-            System.out.println(studentProfile.toString() + "removed from the roster.");
+        if(rutgersRoster.remove(studentProfile))
+            System.out.println(studentProfile + " removed from the roster.");
         else{
-            System.out.println(studentProfile.toString() + "is not in the roster.");
+            System.out.println(studentProfile + " is not in the roster.");
         }
     }
 

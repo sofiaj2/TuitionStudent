@@ -34,8 +34,10 @@ public class Roster {
 
     public Student findStudent(Profile profile) {
         for (int i = 0; i < this.size; i++)
-            if (this.roster[i].getProfile().equals(profile)) {
-                return this.roster[i];
+            if (this.roster[i] != null) {
+                if (this.roster[i].getProfile().equals(profile)) {
+                    return this.roster[i];
+                }
             }
         return null;
     }
@@ -43,8 +45,7 @@ public class Roster {
     /**
      * Grows the array capacity of roster when needed by 4
      */
-    private void grow()
-    { //increase the array capacity by 4
+    private void grow() { //increase the array capacity by 4
         int increaseByValue = 4;
         Student[] tempRoster = new Student[this.size + increaseByValue];
         for (int i = 0; i < this.size; i++) {
@@ -52,7 +53,8 @@ public class Roster {
             Profile tempProfile = this.roster[i].getProfile();
             Major tempMajor = this.roster[i].getMajor();
             int tempCredits = this.roster[i].getCreditCompleted();
-            if (tempStudent.isResident()) { //copy a new resident
+
+            if (tempStudent.isResident()) { //copy a resident
                 tempRoster[i] = new Resident(tempProfile, tempMajor, tempCredits);
             }
             else {
@@ -60,9 +62,13 @@ public class Roster {
                 if (type.equals("(non-resident)")) { //copy a non-resident
                     tempRoster[i] = new NonResident(tempProfile, tempMajor, tempCredits);
                 }
-                else if (type.equals("(non-resident)(tri-state)")) { //tri-state student
-                    String state = this.roster[i].getState();
-                    tempRoster[i] = new TriState()
+                else if (type.equals("(non-resident)(tri-state:NY)")) { //tri-state student
+                    tempRoster[i] = new TriState(tempProfile, tempMajor,
+                            tempCredits, "NY");
+                }
+                else if (type.equals("(non-resident)(tri-state:CT)")) {
+                    tempRoster[i] = new TriState(tempProfile, tempMajor,
+                            tempCredits, "CT");
                 }
                 else if (type.equals("(non-resident)(international:study abroad)")) {
                     tempRoster[i] = new International(tempProfile,
@@ -73,8 +79,6 @@ public class Roster {
                             tempMajor, tempCredits, false);
                 }
             }
-
-
         }
         this.roster = tempRoster;
         this.size += increaseByValue;
@@ -153,6 +157,30 @@ public class Roster {
         for (int i = 0; i < this.size; i++) {
             if (this.roster[i] != null) {
                 if (this.roster[i].getProfile().equals(student.getProfile())) {
+                    studentExists = true;
+                    nullIndex = i;
+                    this.roster[i] = null;
+                    break;
+                }
+            }
+        }
+        if (studentExists && nullIndex > -1) {
+            for (int i = nullIndex; i < this.size - 1; i++) {
+                this.roster[i] = this.roster[i + 1];
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean remove(Profile profile) { //maintain the order after remove
+        boolean studentExists = false;
+        // instantiate the variable that will contain the index of the
+        // student to remove:
+        int nullIndex = -1;
+        for (int i = 0; i < this.size; i++) {
+            if (this.roster[i] != null) {
+                if (this.roster[i].getProfile().equals(profile)) {
                     studentExists = true;
                     nullIndex = i;
                     this.roster[i] = null;

@@ -136,6 +136,10 @@ public abstract class Student implements Comparable<Student> {
             return false;
     }
 
+    public void updateCredits(int creditsToAdd) {
+        this.creditCompleted += creditsToAdd;
+    }
+
     public abstract double tuitionDue(int creditsEnrolled);
 
     public abstract boolean isResident();

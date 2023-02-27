@@ -7,6 +7,7 @@ public class Resident extends Student {
     public Resident(Profile givenProfile, Major givenMajor,
                     int givenCredits) {
         super(givenProfile, givenMajor, givenCredits);
+        this.scholarship = 0;
     }
 
     public Resident(Profile givenProfile, Major givenMajor,
@@ -15,14 +16,9 @@ public class Resident extends Student {
         this.scholarship = givenScholarship;
     }
 
-    public Resident(Resident givenResident) {
-        super(givenResident.getProfile(), givenResident.getMajor(),
-                givenResident.getCreditCompleted());
-    }
-
     public double tuitionDue(int creditsEnrolled) {
         double tuition;
-        if (isFullTime(creditsEnrolled)) { //full time student
+        if (this.isFullTime()) { //full time student
             tuition = universityFee + residentTuition - scholarship;
             if (creditsEnrolled > creditHourLimit) {
                 tuition += creditHour * (creditsEnrolled - creditHourLimit);
@@ -39,12 +35,17 @@ public class Resident extends Student {
         return true;
     }
 
-    private boolean isFullTime(int credits) {
-        if (credits >= 12)
+    public boolean isFullTime() {
+        if (this.getCreditCompleted() >= 12)
             return true;
         return false;
     }
     public int getScholarship(){ return this.scholarship; }
+
+    public void setScholarship(int givenScholarship) {
+        this.scholarship += givenScholarship;
+    }
+
     public String getClassification() {
         return "(resident)";
     }
