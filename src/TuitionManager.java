@@ -137,10 +137,8 @@ public class TuitionManager {
         }
         return true;
     }
-
-    public void enrollStudent(Scanner scanner,
-                              Roster rutgersRoster, Enrollment rutgersEnroll,
-                              String dataToken){
+    private void commandEnrollStudent(Scanner scanner, Roster rutgersRoster,
+                               Enrollment rutgersEnroll){
         String firstName;
         String lastName;
         String dateOfBirth;
@@ -252,6 +250,88 @@ public class TuitionManager {
             } else {System.out.println(studentProfile + " is not in the roster.");}
         }
     }
+
+    private boolean isValidScholarshipAndDate(String scholarshipString,
+                                              Date studentDate,
+                                              String dateOfBirth) {
+        if (!studentDate.isValid())
+            System.out.println("DOB invalid: "
+                    + dateOfBirth + " not a valid calendar date!");
+
+        try {
+            if (Integer.parseInt(scholarshipString) <= 0 || Integer.parseInt(scholarshipString) > 10000) {
+                System.out.println(scholarshipString + ": invalid amount.");
+                return false;
+            }
+        } catch (NumberFormatException nfe) {
+            System.out.println("Amount is not an integer.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     *
+     * @param rutgersEnroll Enrollment list in the
+     */
+    private void displayEnrollment(Enrollment rutgersEnroll){
+        System.out.println("** Enrollment **");
+        rutgersEnroll.print();
+        System.out.println("* end of enrollment *");
+    }
+
+    /**
+     *
+     * @param rutgersEnroll the Enrollment list for
+     * @param rutgersRoster a roster of students to select from
+     */
+    private void displayTuition(Enrollment rutgersEnroll,
+                               Roster rutgersRoster){
+        System.out.println("** Tuition due **");
+        EnrollStudent[] enrollList = rutgersEnroll.getEnrollStudents();
+        Student[] rosterList = rutgersRoster.getRoster();
+        for (int i = 0; i < rutgersEnroll.getSize(); i++){
+            EnrollStudent tempEnrollStudent = enrollList[i];
+            if (tempEnrollStudent != null) {
+                DecimalFormat df = new DecimalFormat( "#.00" );
+                Student tempStudent = rutgersRoster.findStudent(tempEnrollStudent.getProfile());
+                String formattedTuition = df.format(tempStudent.tuitionDue(tempStudent.getCreditCompleted()));
+                System.out.println(tempStudent.getProfile().toString() +
+                        " " + tempStudent.invalidStudent() + " enrolled " +
+                        tempStudent.getCreditCompleted() + " credits: tuition " +
+                        "due: " + formattedTuition);
+            }
+        }
+        System.out.println("* end of tuition due");
+    }
+    private void semesterEnd(Roster rutgersRoster, Enrollment rutgersEnroll) {
+        Student[] rosterList = rutgersRoster.getRoster();
+        EnrollStudent[] enrollList = rutgersEnroll.getEnrollStudents();
+        for (int i = 0; i < rutgersEnroll.getSize(); i++) {
+            EnrollStudent tempEnrollStudent = enrollList[i];
+            if (tempEnrollStudent != null) {
+                Student tempStudent =
+                        rutgersRoster.findStudent(tempEnrollStudent.getProfile());
+                tempStudent.updateCredits(enrollList[i].getCreditsEnrolled());
+            }
+        }
+        System.out.println("Credit completed has been updated.");
+        System.out.println("** list of students eligible for graduation **");
+
+        for (int i = 0; i < rutgersRoster.getSize(); i++) {
+            int creditsForGraduation = 120;
+            Student student = rosterList[i];
+            if (student != null) {
+                if (student.getCreditCompleted() >= creditsForGraduation) {
+                    System.out.println(student.getProfile().toString() + " " +
+                            student.getMajor().toString() + student.toString()
+                            + rutgersRoster.getStanding(student).toString() +
+                            student.getClassification());
+                }
+            }
+        }
+    }
+
     /**
      * Read the lines of user input and calls the respective command
      * dependent on the specific data token represented.

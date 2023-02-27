@@ -1,16 +1,19 @@
 package src;
 
+/**
+ *
+ */
 public class International extends NonResident{
     private boolean isStudyAbroad;
     private static final int minInternationalCredits = 12;
     private static final int maxInternationalCredits = 12;
     private static final int healthInsurance = 2650;
-
     public International(Profile givenProfile, Major givenMajor,
                          int Credits, boolean studiesAbroad){
         super(givenProfile, givenMajor, Credits);
         this.isStudyAbroad = studiesAbroad;
     }
+
     @Override
     public boolean isValid(int creditEnrolled){ //override Student isValid
         // max number that study abroad international student is 12

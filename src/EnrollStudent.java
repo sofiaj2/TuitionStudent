@@ -1,4 +1,8 @@
 package src;
+
+/**
+ *
+ */
 public class EnrollStudent implements Comparable<EnrollStudent> {
     private Profile profile;
     private int creditsEnrolled;

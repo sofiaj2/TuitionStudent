@@ -64,13 +64,16 @@ public class Enrollment {
                 }
             }
         }
-        for (int i = this.size; i-- > 0; ) {
-            if (this.enrollStudents[i] != null) {
-                this.enrollStudents[nullIndex] = this.enrollStudents[i];
-                this.enrollStudents[i] = null;
-                break;
+        if (studentExists) {
+            for (int i = this.size; i > 0; i--) {
+                if (this.enrollStudents[i] != null) {
+                    this.enrollStudents[nullIndex] = this.enrollStudents[i];
+                    this.enrollStudents[i] = null;
+                    break;
+                }
             }
         }
+
     }
 
     public boolean contains(EnrollStudent enrollStudent) {
@@ -84,23 +87,20 @@ public class Enrollment {
         return false;
     }
 
-    public EnrollStudent find(EnrollStudent enrollStudent) {
-        for (int i = 0; i < this.size; i++) {
-            if (this.enrollStudents[i] != null) {
-                if (this.enrollStudents[i].equals(enrollStudent)) {
-                    return this.enrollStudents[i];
-                }
-            }
-        }
-        return null;
-    }
-    public void print(){
+    public void print()
+    {
         for (int i = 0; i < this.size; i++){
-            System.out.println(this.enrollStudents[i].getProfile().toString()
-                    + ":" + "credits enrolled: "
-                    + this.enrollStudents[i].getCreditsEnrolled());
+            if (this.enrollStudents[i] != null)
+                System.out.println(this.enrollStudents[i].getProfile().toString()
+                        + ":" + "credits enrolled: "
+                        + this.enrollStudents[i].getCreditsEnrolled());
         }
     } //print the array as is without sorting
+    public int getSize(){ return this.size; }
+
+    public EnrollStudent[] getEnrollStudents() {
+        return this.enrollStudents;
+    }
 
     public void updateCredits(Profile studentProfile, int credits) {
         for (int i = 0; i < this.size; i++) {

@@ -6,7 +6,7 @@ package src;
  * Has various student methods like compareTo
  * @author Sofia Juliani, Arnold Nguyen
  */
-public abstract class Student implements Comparable<Student> {
+public abstract class  Student implements Comparable<Student> {
     private Profile profile;
     private Major major;
     private int creditCompleted;
