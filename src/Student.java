@@ -153,44 +153,5 @@ public abstract class  Student implements Comparable<Student> {
      * @param args array of characters passed to main
      */
     public static void main(String[] args) {
-        //TEST CASE 1: compare 2 students with the same attributes, should print 0
-        Date d1 = new Date("1/1/2002");
-        Major m1 = Major.CS;
-        Profile p1 = new Profile("computer", "angela", d1);
-        Student s1 = new Student(p1, m1, 30);
-
-        Date d2 = new Date("1/1/2002");
-        Major m2 = Major.CS;
-        Profile p2 = new Profile("Computer", "Angela", d2);
-        Student s2 = new Student(p2, m2, 30);
-
-        System.out.println(s1.compareTo(s2)); //prints 0, equal objects
-
-        //TEST CASE 2: compare 2 students with the different attributes, should print -1
-        Date d3 = new Date("1/1/2002");
-        Major m3 = Major.CS;
-        Profile p3 = new Profile("computer", "angela", d3);
-        Student s3 = new Student(p3, m3, 30);
-
-        Date d4 = new Date("1/1/2002");
-        Major m4 = Major.CS;
-        Profile p4 = new Profile("Computer", "Sabrina", d4);
-        Student s4 = new Student(p4, m4, 30);
-
-        System.out.println(s3.compareTo(s4)); //prints -1, fname is different
-
-        //TEST CASE 3: compare 2 students with the different attributes, should print 1
-        Date d5 = new Date("5/1/2002");
-        Major m5 = Major.CS;
-        Profile p5 = new Profile("computer", "angela", d5);
-        Student s5 = new Student(p5, m5, 30);
-
-        Date d6 = new Date("1/1/2002");
-        Major m6 = Major.CS;
-        Profile p6 = new Profile("Computer", "Angela", d6);
-        Student s6 = new Student(p6, m6, 30);
-
-        System.out.println(s5.compareTo(s6)); //prints 1, dob is different
-        System.out.println(s5.getMajor().toString());
     }
 }

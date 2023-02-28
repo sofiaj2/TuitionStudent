@@ -10,13 +10,13 @@ public class DateTest {
         assertFalse(date.isValid());
     }
     @Test
-    public void test_isValid_daysInFeb_nonValid() {
+    public void test_isValid_invalidDay_nonValid() {
         Date date = new Date("4/31/2003");
         assertFalse(date.isValid());
     }
 
     @Test
-    public void test_isValid_daysInFeb_monthInvalid(){
+    public void test_isValid_monthInvalid(){
         Date date = new Date("13/31/2003");
         assertFalse(date.isValid());
     }

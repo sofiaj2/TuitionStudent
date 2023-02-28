@@ -4,6 +4,12 @@ public class Resident extends Student {
     private int scholarship;
     private static final int residentTuition = 12536, creditHour = 404;
 
+    /**
+     * Constructor for the Resident object
+     * @param givenProfile
+     * @param givenMajor
+     * @param givenCredits
+     */
     public Resident(Profile givenProfile, Major givenMajor,
                     int givenCredits) {
         super(givenProfile, givenMajor, givenCredits);

@@ -367,43 +367,5 @@ public class Roster {
      * @param args pass in arguments as a String
      */
     public static void main(String args[]) {
-        Date d1 = new Date("5/1/1996");
-        Major m1 = Major.BAIT;
-        Profile p1 = new Profile("Doe", "Jane", d1);
-        Student s1 = new Student(p1, m1, 95);
-
-        Date d2 = new Date("4/20/2003");
-        Major m2 = Major.CS;
-        Profile p2 = new Profile("Doe", "John", d2);
-        Student s2 = new Student(p2, m2, 29);
-
-        Date d3 = new Date("7/15/2002");
-        Major m3 = Major.MATH;
-        Profile p3 = new Profile("Kate", "Lindsey", d3);
-        Student s3 = new Student(p3, m3, 59);
-
-        Date d4 = new Date("12/1/2001");
-        Major m4 = Major.ITI;
-        Profile p4 = new Profile("Mary", "Lindsey", d4);
-        Student s4 = new Student(p4, m4, 231);
-
-        Date d5 = new Date("8/17/2003");
-        Major m5 = Major.EE;
-        Profile p5 = new Profile("Brooks", "Ray", d5);
-        Student s5 = new Student(p5, m5, 67);
-        
-        Roster myRoster = new Roster();
-        myRoster.add(s1);
-        myRoster.add(s2);
-        myRoster.add(s3);
-        myRoster.add(s4);
-        myRoster.add(s5);
-
-        System.out.println("print by profile:");
-        myRoster.print();
-        System.out.println("print by standing:");
-        myRoster.printByStanding();
-        System.out.println("print by school, major:");
-        myRoster.printBySchoolMajor();
     }
 }

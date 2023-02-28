@@ -40,13 +40,17 @@ public class NonResident extends Student {
     }
 
     /**
-     * Returns
-     * @return
+     * Returns the classification of the nonResident
+     * @return "(non-resident)" as String
      */
     public String getClassification() {
         return "(non-resident)";
     }
 
+    /**
+     * Invalid student determiner, returns special (Non-Resident)
+     * @return String (Non-Resident)
+     */
     public String invalidStudent() {
         return "(Non-Resident) ";
     }

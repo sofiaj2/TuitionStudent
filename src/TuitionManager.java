@@ -36,6 +36,13 @@ public class TuitionManager {
         return studentMajor;
     }
 
+    /**
+     * Adds a student to Enroll in the Enrollment list
+     * @param scanner object to take in commands
+     * @param rutgersRoster roster object to hold students
+     * @param rutgersEnroll enrollment list to hold students that are enrolled
+     * @param dataToken that is read into command for student
+     */
     private void commandAdd(Scanner scanner, Roster rutgersRoster,
                              Enrollment rutgersEnroll, String dataToken) {
         String dataString;
@@ -84,6 +91,16 @@ public class TuitionManager {
             , studentDate);
         }
     }
+
+    /**
+     * Student Object to read in to add to Roster
+     * @param student object to read in to add to the Roster
+     * @param rutgersRoster Roster object to hold the students
+     * @param firstName attribute for STudent object
+     * @param lastName attribute for STudent object
+     * @param dateOfBirth attribute for student object
+     * @param studentDate Date object that is from DateOfbirth
+     */
     private void addRoster(Student student, Roster rutgersRoster,
                                   String firstName, String lastName,
                                   String dateOfBirth, Date studentDate){
@@ -102,6 +119,17 @@ public class TuitionManager {
             }
         }
     }
+
+    /**
+     * Creation of an extension of the abstract Student class that can create
+     * Resident, nonResident, TriState, and International depending on command
+     * @param dataToken String command to initiate
+     * @param studentProfile Student profile parameter to create Student
+     * @param studentMajor Major object parameter to create Major
+     * @param credits taken parameter for creation of student object
+     * @param scanner object that reads in commands
+     * @return Student extension object (dependent on command)
+     */
     private Student createStudentType(String dataToken,
                                       Profile studentProfile,
                                       Major studentMajor,
@@ -122,6 +150,7 @@ public class TuitionManager {
                     state);
             }
             else {
+                System.out.println(state + ": Invalid state code.");
                 return null;
             }
         } else if (dataToken.equals("AI")) {
@@ -141,6 +170,13 @@ public class TuitionManager {
             return null;
     }
 
+    /**
+     * Determines if credits and date are valid
+     * @param studentDate Date object for Student parameter
+     * @param creditsEnrolled credits student currently enrolled in
+     * @param dateOfBirth String object
+     * @return true if credits and date are valid, false if not.
+     */
     private boolean isValidCreditsAndDate(Date studentDate,
                                          String creditsEnrolled,
                                          String dateOfBirth) {
@@ -158,6 +194,13 @@ public class TuitionManager {
         }
         return true;
     }
+
+    /**
+     * Enrolls a student in the Enrollment list accordingly
+     * @param scanner object that reads in command for Student
+     * @param rutgersRoster Roster object that holds list of Students
+     * @param rutgersEnroll Enrollment list that holds objects
+     */
     private void commandEnrollStudent(Scanner scanner, Roster rutgersRoster,
                                Enrollment rutgersEnroll){
         String firstName;
@@ -205,6 +248,11 @@ public class TuitionManager {
 
     }
 
+    /**
+     * Drops a student from the enrollment class
+     * @param scanner object to read in line commands
+     * @param rutgersEnroll Enrollment List for student objects
+     */
     private void dropStudent(Scanner scanner, Enrollment rutgersEnroll){
         String firstName;
         String lastName;
@@ -233,6 +281,11 @@ public class TuitionManager {
 
     }
 
+    /**
+     * Awards a scholarship to a student in the roster class
+     * @param scanner object to read in command
+     * @param rutgersRoster object that has a list of students
+     */
     private void awardScholarship(Scanner scanner, Roster rutgersRoster){
         String firstName;
         String lastName;
@@ -272,6 +325,13 @@ public class TuitionManager {
         }
     }
 
+    /**
+     * Determines if scholarship is valid
+     * @param scholarshipString
+     * @param studentDate
+     * @param dateOfBirth
+     * @return
+     */
     private boolean isValidScholarshipAndDate(String scholarshipString,
                                               Date studentDate,
                                               String dateOfBirth) {
@@ -302,8 +362,8 @@ public class TuitionManager {
     }
 
     /**
-     *
-     * @param rutgersEnroll the Enrollment list for
+     * Display tuition in the Enrollment List order
+     * @param rutgersEnroll the Enrollment list for student objects
      * @param rutgersRoster a roster of students to select from
      */
     private void displayTuition(Enrollment rutgersEnroll,
@@ -325,6 +385,12 @@ public class TuitionManager {
         }
         System.out.println("* end of tuition due");
     }
+
+    /**
+     * SemesterEnd method for Enrollment List and Students
+     * @param rutgersRoster Roster object that holds students
+     * @param rutgersEnroll Enrollment List object that holds EnrollStudents
+     */
     private void semesterEnd(Roster rutgersRoster, Enrollment rutgersEnroll) {
         Student[] rosterList = rutgersRoster.getRoster();
         EnrollStudent[] enrollList = rutgersEnroll.getEnrollStudents();
