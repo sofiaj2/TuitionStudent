@@ -134,7 +134,7 @@ public class TuitionManager {
                                       Profile studentProfile,
                                       Major studentMajor,
                                       int credits, String[] inputs) {
-        if (dataToken.equals("AR")) {
+        if (dataToken.equals("AR")) { //ar
             return new Resident(studentProfile, studentMajor, credits);
         } else if (dataToken.equals("AT")) {
             String state;
