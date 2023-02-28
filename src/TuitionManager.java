@@ -1,7 +1,11 @@
 package src;
+import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.text.DecimalFormat;
+import java.io.File;
+import java.util.StringTokenizer;
 /**
  * Roster Manager class that manages the roster, with various methods
  * such as sorting by certain attributes, performing commands on roster
@@ -34,31 +38,48 @@ public class TuitionManager {
 
     private void commandAdd(Scanner scanner, Roster rutgersRoster,
                              Enrollment rutgersEnroll, String dataToken) {
+        String dataString;
+        String[] inputs;
         String firstName;
         String lastName;
-        String dateOfBirth;
+        String dateOfBirth ;
+        Date studentDate;
         String majorSubject;
         String creditsEnrolled;
-        Major studentMajor;
-        Date studentDate;
         try {
-            firstName = scanner.next();
-            lastName = scanner.next();
-            dateOfBirth = scanner.next();
-            majorSubject = scanner.next();
-            creditsEnrolled = scanner.next();
-            studentMajor = returnMajor(majorSubject);
+            dataString = scanner.nextLine();
+            inputs = dataString.split(" ");
+            for (int i = 1; i < inputs.length; i++) {
+                if (inputs[i].equals("")) {
+                    throw new NoSuchElementException();
+                }
+            }
+            firstName = inputs[1];
+            lastName = inputs[2];
+            dateOfBirth = inputs[3];
             studentDate = new Date(dateOfBirth);
-        } catch (NoSuchElementException exception) {
+            majorSubject = inputs[4];
+            creditsEnrolled = inputs[5];
+        }
+        catch (ArrayIndexOutOfBoundsException exception){
             System.out.println("Missing data in line command.");
-            return; }
+            return;
+        }
+        /*String firstName = inputs[0];
+        String lastName = inputs[1];
+        String dateOfBirth = inputs[2];
+        Date studentDate = new Date(dateOfBirth);
+        String majorSubject = inputs[3];
+        String creditsEnrolled = inputs[4];
+        Student studentToAdd;*/
+        Major studentMajor = returnMajor(majorSubject);
         boolean isValidCreditCompleted = isValidCreditsAndDate(studentDate,
                 creditsEnrolled, dateOfBirth);
         if (studentMajor != null && studentDate.isValid() && isValidCreditCompleted) {
             Profile studentProfile = new Profile(lastName, firstName, studentDate);
             int credits = Integer.parseInt(creditsEnrolled);
             Student student = createStudentType(dataToken, studentProfile, studentMajor,
-                    credits, scanner);
+                    credits, inputs);
             addRoster(student, rutgersRoster, firstName, lastName, dateOfBirth
             , studentDate);
         }
@@ -84,15 +105,15 @@ public class TuitionManager {
     private Student createStudentType(String dataToken,
                                       Profile studentProfile,
                                       Major studentMajor,
-                                      int credits, Scanner scanner) {
+                                      int credits, String[] inputs) {
         if (dataToken.equals("AR")) {
             return new Resident(studentProfile, studentMajor, credits);
         } else if (dataToken.equals("AT")) {
             String state;
             try {
-                state = scanner.next();
+                state = inputs[6];
             }
-            catch (NoSuchElementException exception) {
+            catch (ArrayIndexOutOfBoundsException exception) {
                 System.out.println("Missing data in line command.");
                 return null;
             }
@@ -106,9 +127,9 @@ public class TuitionManager {
         } else if (dataToken.equals("AI")) {
             boolean studiesAbroad;
             try {
-                studiesAbroad = scanner.nextBoolean();
+                studiesAbroad = Boolean.parseBoolean(inputs[6]);
             }
-            catch (NoSuchElementException exception) {
+            catch (ArrayIndexOutOfBoundsException exception) {
                 studiesAbroad = false;
             }
             return new International(studentProfile,
@@ -336,7 +357,7 @@ public class TuitionManager {
      * Read the lines of user input and calls the respective command
      * dependent on the specific data token represented.
      */
-    public void run() {
+    public void run() throws IOException{
         System.out.println("Tuition Manager running...");
         Scanner scanner = new Scanner(System.in);
         Roster rutgersRoster = new Roster();
@@ -371,23 +392,104 @@ public class TuitionManager {
                 commandEnrollStudent(scanner, rutgersRoster, rutgersEnroll);
             } else if (dataToken.equals("D")){
                 dropStudent(scanner,rutgersEnroll);
-            }
-            else if (dataToken.equals("S")) {
+            } else if (dataToken.equals("S")) {
                 awardScholarship(scanner, rutgersRoster);
-            }
-            else if (dataToken.equals("PT")){
+            } else if (dataToken.equals("PT")){
                 displayTuition( rutgersEnroll, rutgersRoster);
-            }
-            else if (dataToken.equals("PE")){
+            } else if (dataToken.equals("PE")){
                 displayEnrollment(rutgersEnroll);
-            }
-            else if (dataToken.equals("SE")) {
+            } else if (dataToken.equals("SE")) {
                 semesterEnd(rutgersRoster, rutgersEnroll);
-            }
-            else {
+            } else if (dataToken.equals("LS")) {
+                Scanner studentList = new Scanner(new File ("studentList.txt"));
+                loadCommand(studentList, rutgersRoster);
+            } else {
                 System.out.println(dataToken + " is an invalid command!");
             }
         }
+    }
+
+    /**
+     * Load command method that reads from StudentList
+     * @param studentList StudentList from directory
+     * @param rutgersRoster Roster object that holds Students
+     */
+    private void loadCommand(Scanner studentList, Roster rutgersRoster) {
+        while (studentList.hasNextLine()) {
+            String dataToken = studentList.nextLine();
+            String[] inputs = dataToken.split(",");
+            String typeOfStudent = inputs[0];
+            String firstName = inputs[1];
+            String lastName = inputs[2];
+            String dateOfBirth = inputs[3];
+            Date studentDate = new Date(dateOfBirth);
+            String majorSubject = inputs[4];
+            String creditsEnrolled = inputs[5];
+            Student studentToAdd;
+            Major studentMajor = returnMajor(majorSubject);
+            if (studentMajor != null && studentDate.isValid() && isValidCreditsAndDate(studentDate,
+                    creditsEnrolled, dateOfBirth)) {
+                Profile studentProfile = new Profile(lastName, firstName, studentDate);
+                int credits = Integer.parseInt(creditsEnrolled);
+                studentToAdd = createStudentTypeLS(typeOfStudent,
+                        studentProfile, studentMajor, credits, inputs);
+                if (studentToAdd != null) {
+                    if (!rutgersRoster.contains(studentToAdd)) {
+                        rutgersRoster.add(studentToAdd);
+                    }
+                }
+            }
+        }
+        System.out.println("Students loaded to the roster.");
+    }
+
+    /**
+     * Special type of Create Student List that has to handle input difference
+     * @param dataToken that is read in command line
+     * @param studentProfile Profile object for Student
+     * @param studentMajor Major object for Student
+     * @param credits Credits for Student object
+     * @param inputs array that reads in commands
+     * @return
+     */
+    private Student createStudentTypeLS(String dataToken,
+                                      Profile studentProfile,
+                                      Major studentMajor,
+                                      int credits, String[] inputs) {
+        if (dataToken.equals("R")) {
+            return new Resident(studentProfile, studentMajor, credits);
+        } else if (dataToken.equals("T")) {
+            String state;
+            try {
+                state = inputs[6];
+            }
+            catch (NoSuchElementException exception) {
+
+                return null;
+            }
+            if (state.equalsIgnoreCase("CT") || state.equalsIgnoreCase("NY")) {
+                return new TriState(studentProfile, studentMajor, credits,
+                        state);
+            }
+            else {
+                System.out.print(state + ": Invalid state code.");
+                return null;
+            }
+        } else if (dataToken.equals("I")) {
+            boolean studiesAbroad;
+            try {
+                studiesAbroad = Boolean.parseBoolean(inputs[6]);
+            }
+            catch (NoSuchElementException exception) {
+                studiesAbroad = false;
+            }
+            return new International(studentProfile,
+                    studentMajor, credits, studiesAbroad);
+        } else if (dataToken.equals("N")) {
+            return new NonResident(studentProfile,
+                    studentMajor, credits);
+        } else
+            return null;
     }
 
     /**

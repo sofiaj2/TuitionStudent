@@ -22,13 +22,13 @@ public class DateTest {
     }
 
     @Test
-    public void test_isValid_daysInFeb_dayInvalid(){
+    public void test_isValid_dayInvalid(){
         Date date = new Date("3/32/2003");
         assertFalse(date.isValid());
     }
 
     @Test
-    public void test_isValid_daysInFeb_negativeMonth() {
+    public void test_isValid_negativeMonth() {
         Date date = new Date("-1/31/2003");
         assertFalse(date.isValid());
     }
@@ -40,7 +40,7 @@ public class DateTest {
     }
 
     @Test
-    public void test_isValid_daysInFeb_validDates() {
+    public void test_isValid_daysInMarch_validDates() {
         Date date = new Date("3/20/2003");
         assertTrue(date.isValid());
     }

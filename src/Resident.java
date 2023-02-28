@@ -10,12 +10,11 @@ public class Resident extends Student {
         this.scholarship = 0;
     }
 
-    public Resident(Profile givenProfile, Major givenMajor,
-                    int givenCredits, int givenScholarship) {
-        super(givenProfile, givenMajor, givenCredits);
-        this.scholarship = givenScholarship;
-    }
-
+    /**
+     * Gives the tuition due for a resident of the abstract class Student
+     * @param creditsEnrolled for credits the resident is taking
+     * @return tuition the Resident owes
+     */
     public double tuitionDue(int creditsEnrolled) {
         double tuition;
         if (this.isFullTime()) { //full time student
@@ -40,7 +39,6 @@ public class Resident extends Student {
             return true;
         return false;
     }
-    public int getScholarship(){ return this.scholarship; }
 
     public void setScholarship(int givenScholarship) {
         this.scholarship += givenScholarship;

@@ -49,7 +49,7 @@ public class Roster {
         int increaseByValue = 4;
         Student[] tempRoster = new Student[this.size + increaseByValue];
         for (int i = 0; i < this.size; i++) {
-            Student tempStudent = tempRoster[i];
+            Student tempStudent = this.roster[i];
             Profile tempProfile = this.roster[i].getProfile();
             Major tempMajor = this.roster[i].getMajor();
             int tempCredits = this.roster[i].getCreditCompleted();
