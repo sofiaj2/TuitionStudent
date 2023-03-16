@@ -1,8 +1,8 @@
 package src;
 
 public class Resident extends Student {
-    private int scholarship;
-    private static final int residentTuition = 12536, creditHour = 404;
+    private double scholarship;
+    private static final double residentTuition = 12536, creditHour = 404;
 
     /**
      * Constructor for the Resident object
@@ -23,15 +23,16 @@ public class Resident extends Student {
      */
     public double tuitionDue(int creditsEnrolled) {
         double tuition;
-        if (this.isFullTime()) { //full time student
+        if (isFullTime(creditsEnrolled)) { //full time student
             tuition = universityFee + residentTuition - scholarship;
             if (creditsEnrolled > creditHourLimit) {
-                tuition += creditHour * (creditsEnrolled - creditHourLimit);
+                tuition =
+                        (creditHour * (creditsEnrolled - creditHourLimit)) + tuition;
             }
         }
         else { //part time student
             tuition = (creditHour * creditsEnrolled)
-                    + (percentFullTimeRate * residentTuition);
+                    + (percentFullTimeRate * universityFee);
         }
         return tuition;
     }

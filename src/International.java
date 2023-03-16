@@ -8,7 +8,7 @@ public class International extends NonResident{
     private boolean isStudyAbroad;
     private static final int minInternationalCredits = 12;
     private static final int maxInternationalCredits = 12;
-    private static final int healthInsurance = 2650;
+    private static final double healthInsurance = 2650;
 
     /**
      * Constructor for the International object
@@ -84,7 +84,7 @@ public class International extends NonResident{
         if (this.isStudyAbroad) {
             return "(International studentstudy abroad) ";
         }
-        return "(International student)";
+        return "(International student) ";
     }
 
 }

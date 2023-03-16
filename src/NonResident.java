@@ -5,8 +5,8 @@ package src;
  * Has methods to determine if resident, and tuition.
  */
 public class NonResident extends Student {
-    protected final int nonResidentTuition = 29737;
-    protected final int creditHour = 966;
+    protected final double nonResidentTuition = 29737;
+    protected final double creditHour = 966;
 
     /**
      * Constructor for NonResident with super
@@ -33,10 +33,19 @@ public class NonResident extends Student {
      * @return the tuition due for the student
      */
     public double tuitionDue(int creditsEnrolled){
-        if (creditsEnrolled > creditHourLimit)
-            return (nonResidentTuition + universityFee + ((creditsEnrolled -
-                    creditHourLimit) * creditHour));
-        return nonResidentTuition + universityFee;
+        double tuition;
+        if (isFullTime(creditsEnrolled)) { //full time student
+            tuition = universityFee + nonResidentTuition;
+            if (creditsEnrolled > creditHourLimit) {
+                tuition =
+                        (creditHour * (creditsEnrolled - creditHourLimit)) + tuition;
+            }
+        }
+        else { //part time student
+            tuition = (creditHour * creditsEnrolled)
+                    + (percentFullTimeRate * universityFee);
+        }
+        return tuition;
     }
 
     /**
@@ -53,5 +62,11 @@ public class NonResident extends Student {
      */
     public String invalidStudent() {
         return "(Non-Resident) ";
+    }
+
+    public boolean isFullTime(int creditsEnrolled) {
+        if (creditsEnrolled >= 12)
+            return true;
+        return false;
     }
 }

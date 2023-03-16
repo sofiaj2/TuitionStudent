@@ -10,7 +10,7 @@ public abstract class  Student implements Comparable<Student> {
     private Profile profile;
     private Major major;
     private int creditCompleted;
-    protected static final int universityFee = 3268;
+    protected static final double universityFee = 3268;
     protected static final int minCredit = 3, maxCredit = 24;
     protected static final int creditHourLimit = 16;
     protected static final double percentFullTimeRate = 0.8;
@@ -148,10 +148,4 @@ public abstract class  Student implements Comparable<Student> {
 
     public abstract String getClassification();
 
-    /**
-     * Testbed main for Student class test cases for Student methods
-     * @param args array of characters passed to main
-     */
-    public static void main(String[] args) {
-    }
 }

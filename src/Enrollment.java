@@ -1,5 +1,11 @@
 package src;
 
+/**
+ * Enrollment class that handles EnrollStudent objects
+ * Has various methods to handle EnrollStudent objects such as add, grow,
+ * remove.
+ * @authors Sofia Juliani, Arnold Nguyen
+ */
 public class Enrollment {
     private EnrollStudent[] enrollStudents;
     private int size;
@@ -65,7 +71,7 @@ public class Enrollment {
             }
         }
         if (studentExists) {
-            for (int i = this.size; i > 0; i--) {
+            for (int i = this.size - 1; i > 0; i--) {
                 if (this.enrollStudents[i] != null) {
                     this.enrollStudents[nullIndex] = this.enrollStudents[i];
                     this.enrollStudents[i] = null;
@@ -110,5 +116,28 @@ public class Enrollment {
                 }
             }
         }
+    }
+
+    /**
+     * Determines if the enrollment is empty
+     * @return true if empty, false if not
+     */
+    public boolean isEnrollmentEmpty() {
+        for (int i = 0; i < this.size; i++) {
+            if (this.enrollStudents[i] != null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public EnrollStudent findStudent(Profile profile) {
+        for (int i = 0; i < this.size; i++)
+            if (this.enrollStudents[i] != null) {
+                if (this.enrollStudents[i].getProfile().equals(profile)) {
+                    return this.enrollStudents[i];
+                }
+            }
+        return null;
     }
 }
